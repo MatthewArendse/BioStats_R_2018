@@ -228,6 +228,10 @@ ggplot(data = SA_Time, aes(y = now_now, x = just_now))+
     group_by(SF) %>% 
     filter(SF == "V")
   
+  Av_Vips <- Vips %>% 
+    na.omit() %>% 
+    summarise(mn.svl = mean(TL))
+  
 Av_all_vipers <- Vipers %>% 
   na.omit() %>% 
   group_by(SF) %>% 
@@ -263,12 +267,26 @@ Av_all_vipers <- Vipers %>%
     theme_minimal()
   
   
-  #Av size Crotalines vs Vipers:
+  #Av size Crotalines vs Viperines:
   ggplot(data = Vipers, aes( x = SF , y = TL))+
     geom_boxplot(aes(fill = SF), notch = TRUE)+
     geom_point(data = Av_all_vipers, size = 2, shape = 18, aes(y = mn.TL), colour = "goldenrod")+
     labs(title = "Average Body Size", subtitle = "Across Viper Clades", y = "Av. Body Size (mm)",x = "Clade") +
+    theme_minimal()+
+    facet_wrap(~SF, scales = "free_y")
+  
+  #Av size Viperines:
+  ggplot(data = Vips, aes( x = SF , y = TL))+
+    geom_boxplot(aes(fill = SF))+
+    geom_point(data = Av_Vips, size = 2, shape = 18, aes(y = mn.svl), colour = "goldenrod")+
+    labs(title = "Average Body Size", subtitle = "for the Viperines", y = "Av. Body Size (mm)",x = "Clade") +
+    theme_minimal()
+
+
+  #Av size Crotalines:
+  ggplot(data = Crots, aes( x = SF , y = TL))+
+    geom_boxplot(aes(fill = SF))+
+    geom_point(data = Av_Crots, size = 2, shape = 18, aes(y = mn.svl), colour = "goldenrod")+
+    labs(title = "Average Body Size", subtitle = "for the Crotalines", y = "Av. Body Size (mm)",x = "Clade") +
     theme_minimal()
   
-  
-
