@@ -204,5 +204,71 @@ ggplot(data = SA_Time, aes(y = now_now, x = just_now))+
   geom_point()+
   coord_equal(xlim = c(0, 60), ylim = c(0,60))+
   geom_smooth(method = "lm")
+
+
+
+
+# Own Data Playing --------------------------------------------------------
+
+  #Load the Data
+  Vipers <- read_csv("C:/R Workshop 2018/Vipers(Max SVL).csv")
+
+
+  #Sort the Data
+    
+  Crots <- Vipers %>% 
+    group_by(SF) %>% 
+    filter(SF == "C")
+  
+  Av_Crots <- Crots %>% 
+    na.omit() %>% 
+    summarise(mn.svl = mean(TL))
+  
+  Vips <- Vipers %>% 
+    group_by(SF) %>% 
+    filter(SF == "V")
+  
+Av_all_vipers <- Vipers %>% 
+  na.omit() %>% 
+  group_by(SF) %>% 
+  summarise(mn.TL = mean(TL))
+  
+  
+
+  
+  #TL vs Latitude across all Vipers
+  
+  ggplot(data = Vipers, aes(y = TL, x = Latitude))+
+    geom_point(aes(colour = SF))+
+    geom_smooth(method = "lm")+    
+    labs(title = "Latitudinal Variation in Body Size", subtitle = "Across the Viperidae", y = "Av. Body Size (mm)",x = "Latitude (km)") +
+    theme_minimal()
+  
+  
+  #TL vs Latitude for Crotalines
+  
+  ggplot(data = Crots, aes(y = TL, x = Latitude))+
+    geom_point()+
+    geom_smooth(method = "lm")+
+    labs(title = "Latitudinal Variation in Body Size", subtitle = "Across the Crotalines", y = "Av. Body Size (mm)",x = "Latitude (km)") +
+    theme_minimal()
+  
+  
+  #TL vs Latitude for Viperines
+  
+  ggplot(data = Vips, aes(y = TL, x = Latitude))+
+    geom_point()+
+    geom_smooth(method = "lm")+
+    labs(title = "Latitudinal Variation in Body Size", subtitle = "Across the Viperines", y = "Av. Body Size (mm)",x = "Latitude (km)") +
+    theme_minimal()
+  
+  
+  #Av size Crotalines vs Vipers:
+  ggplot(data = Vipers, aes( x = SF , y = TL))+
+    geom_boxplot(aes(fill = SF), notch = TRUE)+
+    geom_point(data = Av_all_vipers, size = 2, shape = 18, aes(y = mn.TL), colour = "goldenrod")+
+    labs(title = "Average Body Size", subtitle = "Across Viper Clades", y = "Av. Body Size (mm)",x = "Clade") +
+    theme_minimal()
+  
   
 
