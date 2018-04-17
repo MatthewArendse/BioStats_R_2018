@@ -10,7 +10,6 @@
 # Load Libraries ----------------------------------------------------------
 
 library(tidyverse)
-library(ggplot2)
 library(ggpubr)
 library(RColorBrewer)
 library(viridisLite)
