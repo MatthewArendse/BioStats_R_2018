@@ -143,3 +143,18 @@ r_one <- data.frame(dat = rnorm(n = 20, mean = 20, sd = 5), sample = "A")
   #is A greater than B?
   t.test(dat ~ sample, data = r_two, var.equal = TRUE, alternative = "greater")
   
+  
+
+# Play Own Data -----------------------------------------------------------
+
+Vipers <- read_csv("C:/R Workshop 2018/Vipers(Max SVL).csv")
+
+Vipers <- Vipers[-c(26),]
+
+t.test(TL ~ SF, data = Vipers, var.equal = FALSE)
+
+ggplot(data = Vipers, aes( x = SF , y = TL))+
+  geom_boxplot(aes(fill = SF))+
+  labs(title = "Average Body Size", subtitle = "Crotalines vs Viperines", y = "Av. Body Size (mm)",x = "Clade") +
+  theme_minimal()
+
