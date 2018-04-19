@@ -151,10 +151,17 @@ Vipers <- read_csv("C:/R Workshop 2018/Vipers(Max SVL).csv")
 
 Vipers <- Vipers[-c(26),]
 
+Av_all_vipers <- Vipers %>% 
+  na.omit() %>% 
+  group_by(SF) %>% 
+  summarise(mn.TL = mean(TL))
+
+
 t.test(TL ~ SF, data = Vipers, var.equal = FALSE)
 
 ggplot(data = Vipers, aes( x = SF , y = TL))+
   geom_boxplot(aes(fill = SF))+
+  geom_point(data = Av_all_vipers, size = 2, shape = 16, aes(y = mn.TL), colour = "yellow")+
   labs(title = "Average Body Size", subtitle = "Crotalines vs Viperines", y = "Av. Body Size (mm)",x = "Clade") +
   theme_minimal()
 
