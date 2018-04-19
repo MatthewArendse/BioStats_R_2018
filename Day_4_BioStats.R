@@ -84,7 +84,7 @@ library(ggpubr)
            y = "Difference",x = "Diet Pairs")+
       theme_pubr()+
       theme(legend.position = "right")
-     
+ # RWS: Very nice!   
 
 # Play Own Data
     
@@ -132,8 +132,8 @@ library(ggpubr)
     plot(TukeyHSD(chicks.aov2))
     
     # How to run a Multiple Factor ANOVA
-    summary(aov(weight ~ Diet * as.factor(Time) #this is where you add more factors
-                , data = filter(chicks, Time %in% c(4, 21)))) #this is used to specify the time range
+    summary(aov(weight ~ Diet * as.factor(Time), #this is where you add more factors
+                data = filter(chicks, Time %in% c(4, 21)))) #this is used to specify the time range
     
     TukeyHSD(aov(weight ~ Diet * as.factor(Time), data = filter(chicks, Time %in% c(0, 21))))  
 
