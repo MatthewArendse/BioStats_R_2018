@@ -43,8 +43,8 @@ descdist(vipers_TL_numeric, discrete = FALSE, boot = 1000)
 
 r_uni <- runif(100)
 
-par(mfro = c(1,1))
-plot( x = c(1:100), y = y)
+par(mfrow = c(1,1))
+plot(x = c(1:100), y = r_uni)
 hist(r_uni)
 descdist(r_uni, discrete = FALSE)
 
@@ -102,17 +102,17 @@ r_one <- data.frame(dat = rnorm(n = 20, mean = 20, sd = 5), sample = "A")
   t.test(r_one$dat, mu = 20) #here mu refers to the Pop.Mean
 
   #Results
-  One Sample t-test #type of test we used
-  
-  data:  r_one$dat
-  t = 1.0718, df = 19, p-value = 0.2973 # T-value and P values (NOT SIG.)
-  alternative hypothesis: true mean is not equal to 20 # statement of results
-  95 percent confidence interval: # level of confidence
-    18.85107 23.56042
-  sample estimates:
-    mean of x 
-  21.20574 #actual mean calculated and tested against hypothesised mean.
-  
+#  One Sample t-test #type of test we used
+#  
+#  data:  r_one$dat
+#  t = 1.0718, df = 19, p-value = 0.2973 # T-value and P values (NOT SIG.)
+#  alternative hypothesis: true mean is not equal to 20 # statement of results
+#  95 percent confidence interval: # level of confidence
+#    18.85107 23.56042
+#  sample estimates:
+#    mean of x 
+#  21.20574 #actual mean calculated and tested against hypothesised mean.
+  # RWS: Avoid having uncommented text in your scripts
   
   
 
@@ -147,6 +147,7 @@ r_one <- data.frame(dat = rnorm(n = 20, mean = 20, sd = 5), sample = "A")
 
 # Play Own Data -----------------------------------------------------------
 
+# I need to be able to load the file to check your work
 Vipers <- read_csv("C:/R Workshop 2018/Vipers(Max SVL).csv")
 
 Vipers <- Vipers[-c(26),]
