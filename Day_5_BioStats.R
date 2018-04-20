@@ -273,22 +273,87 @@ ggplot(data = ecklonia, aes(x = stipe_length, y = frond_length)) +
 
 # Alternate method
 
-ecklonia_pearson <- cor(ecklonia_sub)
+ecklonia_pearson <- round(cor(ecklonia_sub),2)
 ecklonia_pearson
 
 corrplot(ecklonia_pearson, method = "circle")
 
 
 
-# Heat Map for ecklonia_pearsons ------------------------------------------
+# Heat Map 1 for ecklonia_pearsons ------------------------------------------
 library(reshape2)
 
 melted_ecklonia <- melt(ecklonia_pearson)
 
 ggplot(data = melted_ecklonia, aes(x=Var1, y=Var2, fill=value)) + 
   geom_tile()+
-  labs(x = "Variable 1", y = "Variable 2",  title = "Correlation of multiple Ecklonia variables ") +
+  labs(x = "Variable 1", y = "Variable 2",  title = "Pearson correlation coefficients of multiple Ecklonia variables") +
   theme_pubclean()+
   theme(legend.position = "right")+
   theme(axis.text.x = element_text(angle = 55, hjust = 1,vjust = 1))
+
+
+# Heat Map 2 --------------------------------------------------------------
+
+
+# Get upper triangle of the correlation matrix
+get_upper_tri <- function(ecklonia_pearson){
+  ecklonia_pearson[lower.tri(ecklonia_pearson)]<- NA
+  return(ecklonia_pearson)
+}
+
+# Melt the correlation matrix
+upper_tri <- get_upper_tri(ecklonia_pearson)
+melted_eck2 <- melt(upper_tri, na.rm = TRUE)
+
+# Plot new Heatmap
+
+ggplot(data = melted_eck2 , aes(Var2, Var1, fill = value))+
+  geom_tile(color = "white")+
+  scale_fill_gradient2(low = "red", high = "blue", mid = "black", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Pearson\nCorrelation") +
+  labs(x = "Variable 1", y = "Variable 2",  title = "Pearson correlation coefficients of multiple Ecklonia variables ") +
+  theme_pubclean()+
+  theme(legend.position = "right")+
+  theme(axis.text.x = element_text(angle = 55, hjust = 1,vjust = 1))+
+  coord_fixed()
+
+
+# Heat Map 3 FINAL --------------------------------------------------------------
+
+# Re order the data
+
+reorder_eck <- function(ecklonia_pearson){
+  # Use correlation between variables as distance
+  dd <- as.dist((1-ecklonia_pearson)/2)
+  hc <- hclust(dd)
+  ecklonia_pearson <-ecklonia_pearson[hc$order, hc$order]
+}
+
+
+# Reorder the correlation matrix
+eck <- reorder_eck(ecklonia_pearson)
+upper_tri <- get_upper_tri(eck)
+
+# Melt the correlation matrix
+melted_eck3 <- melt(upper_tri, na.rm = TRUE) 
+
+# Create FINAL HeatMap
+ggplot(melted_eck3, aes(Var2, Var1, fill = value))+
+  geom_tile(color = "white")+
+  geom_text(aes(Var2, Var1, label = value), color = "white", size = 4)+
+  scale_fill_gradient2(low = "red", high = "blue", mid = "black", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Pearson\nCorrelation") +
+  labs(x = "Variable 1", y = "Variable 2",  title = "Pearson correlation coefficients of multiple Ecklonia variables ") +
+  theme_pubclean()+
+  theme(legend.position = "right")+
+  theme(axis.text.x = element_text(angle = 55, hjust = 1,vjust = 1))+
+  coord_fixed()
+  
+
+
+
+
 
