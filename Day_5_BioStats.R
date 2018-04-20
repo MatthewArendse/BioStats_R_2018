@@ -277,3 +277,18 @@ ecklonia_pearson <- cor(ecklonia_sub)
 ecklonia_pearson
 
 corrplot(ecklonia_pearson, method = "circle")
+
+
+
+# Heat Map for ecklonia_pearsons ------------------------------------------
+library(reshape2)
+
+melted_ecklonia <- melt(ecklonia_pearson)
+
+ggplot(data = melted_ecklonia, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile()+
+  labs(x = "Variable 1", y = "Variable 2",  title = "Correlation of multiple Ecklonia variables ") +
+  theme_pubclean()+
+  theme(legend.position = "right")+
+  theme(axis.text.x = element_text(angle = 55, hjust = 1,vjust = 1))
+
