@@ -12,7 +12,7 @@
 
 library(tidyverse)
 library(ggpubr)
-library(Rmisc)
+# library(Rmisc) # Unfortunately this overrides many dplyr functions
 
 
 # Load & Sort Data ---------------------------------------------------------------
@@ -31,7 +31,7 @@ snakes.summary <- Snakes %>%
   ungroup()
 snakes.summary
 
-snakes.summary2 <- summarySE(data = Snakes, measurevar = "openings", groupvars = c("day"))
+snakes.summary2 <- Rmisc::summarySE(data = Snakes, measurevar = "openings", groupvars = c("day"))
 
 
 # Visualise the Data ------------------------------------------------------
@@ -138,7 +138,7 @@ ggplot(moths.tukey2, aes(x = Locations, y = diff))+
        y = "Difference",x = "Locations")+
   theme_pubr()+
   theme(legend.position = "right")
-
+# RWS: This looks great!
 
 
 
