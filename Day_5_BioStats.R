@@ -136,15 +136,118 @@ ggplot(moths.tukey2, aes(x = Locations, y = diff))+
   labs(title = "TukeyHSD for two-tail ANOVA",  
        subtitle = "For variation in catch number size by trap location", 
        y = "Difference",x = "Locations")+
-  theme_pubr()+
   theme(legend.position = "right")
 # RWS: This looks great!
 
 
 
+# ANOVA Exercises ---------------------------------------------------------
 
 
+# Exercise 1 (Pigs) --------------------------------------------------------------
 
+# enter the mass at the end of the experiment
+feed_1 <- c(60.8, 57.0, 65.0, 58.6, 61.7)
+feed_2 <- c(68.7, 67.7, 74.0, 66.3, 69.8)
+feed_3 <- c(102.6, 102.1, 100.2, 96.5)
+feed_4 <- c(87.9, 84.2, 83.1, 85.7, 90.3)
+
+# make a dataframe
+bacon <- as.tibble(data.frame(
+  feed = c(
+    rep("Feed 1", length(feed_1)),
+    rep("Feed 2", length(feed_2)),
+    rep("Feed 3", length(feed_3)),
+    rep("Feed 4", length(feed_4))
+  ),
+  mass = c(feed_1, feed_2, feed_3, feed_4)
+))
+
+# Research Question:
+
+  #Does feed type have an effect on mass at the end of the experiment?
+
+  #H0: Feed type has no affect on pig mass
+
+#Summarise the data
+bacon_sum <- bacon %>% 
+  group_by(feed) %>% 
+  summarise(mn.mass = mean(mass))
+
+#visualise the data
+ggplot(bacon_sum, aes(x = feed, y = mn.mass))+
+  geom_col(aes(fill = feed))
+
+#Run an ANOVA to test H0:
+
+bacon.aov <- aov(mass ~ feed, data = bacon) 
+ 
+summary(bacon.aov)
+
+#Visualise the results
+bacon.tukey <- TukeyHSD(bacon.aov, which = "feed")
+plot(bacon.tukey)
+
+bacon.tukey2 <- as.data.frame(bacon.tukey$feed)
+bacon.tukey2$feed <- row.names(bacon.tukey2)
+
+
+#Plot the results
+
+ggplot(bacon.tukey2, aes(x = feed, y = diff))+ 
+  geom_errorbar(aes(ymin = lwr, 
+                    ymax = upr))+
+  geom_point(aes(colour = feed),size = 4)+
+  geom_hline(yintercept = 0, linetype = "dashed")+
+  labs(title = "TukeyHSD for two-tail ANOVA",  
+       subtitle = "For variation in pig mass by feed type", 
+       y = "Difference",x = "Feed Type")+
+  theme(legend.position = "right")
+
+
+# We reject H0 in favour of an alternative hypothesis. 
+# There is a significant difference in pig mass as a result of feed type.
+# Feed type does have an effect on pig mass.
+
+
+# Exercise 2 (Tooth Growth)--------------------------------------------------------------
+
+# Load data
+teeth <- datasets::ToothGrowth
+
+# Learn about the experiment
+?ToothGrowth
+
+#Research Question
+  #Is there a difference in results between OJ and VC tests? 
+    #...and if so, which dosage level contributed most to tooth growth?
+  #H0:No difference exists between OJ and VC treatments or dosage level
+  #H1: A difference does exist
+
+#Does treatment type (OJ/VC) affect tooth lenght?
+teeth.aov <- aov(len ~ as.factor(supp) * as.factor(dose), data = teeth) 
+
+summary(teeth.aov)
+
+teeth.tukey <- TukeyHSD(teeth.aov)
+plot(teeth.tukey)
+
+#Visualise the results
+
+teeth.tukey2 <- as.data.frame(teeth.tukey$dose)
+teeth.tukey2$supp <- row.names(teeth.tukey2)
+
+#Plot the results
+
+ggplot(teeth.tukey2, aes(x = supp, y = diff))+ 
+  geom_errorbar(aes(ymin = lwr, 
+                    ymax = upr))+
+  geom_point(aes(colour = supp),size = 4)+
+  geom_hline(yintercept = 0, linetype = "dashed")+
+  labs(title = "TukeyHSD for two-tail ANOVA",  
+       subtitle = "For variation in teeth length by treatment type", 
+       y = "Difference",x = "Treatment Type")+
+  theme(legend.position = "right")
 
 # Linear Regression -------------------------------------------------------
 
